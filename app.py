@@ -39,6 +39,13 @@ class User(db.Model, UserMixin):
     username = db.Column('Username', db.String(64), unique=True, index=True, nullable=False)
     password = db.Column('Password', db.String(64), unique=True, index=True, nullable=False)
 
+class Category(db.Model):
+    __tablename__ = "category"
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column("Category", db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", lazy=True)
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -94,7 +101,21 @@ def notes():
 @app.route("/categories")
 @login_required
 def categories():
-    return render_template('categories.html', title='Categories')
+    db.create_all()
+    all_categories = get_categories()
+    return render_template('categories.html', title='Categories', all_categories=all_categories)
+
+def get_categories():
+    try:
+        all_categories = Category.query.filter_by(user_id=current_user.id).all()
+    except:
+        all_categories = []
+    return all_categories
+
+@app.route("/create_category")
+@login_required
+def create_category():
+    return render_template('create_category.html', title='New category')
 
 @app.route("/search")
 @login_required
