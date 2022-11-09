@@ -20,3 +20,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', [DataRequired()])
     remember = BooleanField('Remember me')
     submit = SubmitField('Log In')
+    
+class CatogeryForm(FlaskForm):
+    category = StringField('Category', [DataRequired()])
+    submit = SubmitField('Add')
