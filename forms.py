@@ -1,0 +1,22 @@
+from flask_wtf import FlaskForm
+from wtforms import SubmitField, BooleanField, StringField, PasswordField
+from wtforms.validators import DataRequired, ValidationError, EqualTo
+import app
+
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Username', [DataRequired()])
+    password = PasswordField('Password', [DataRequired()])
+    approved_password = PasswordField('Repeat password', [EqualTo('password', "Password must be identical")])
+    submit = SubmitField('Register')
+
+    def check_username(self, username):
+        user = app.User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('This username is already taken. Please choose different one.')
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', [DataRequired()])
+    password = PasswordField('Password', [DataRequired()])
+    remember = BooleanField('Remember me')
+    submit = SubmitField('Log In')
