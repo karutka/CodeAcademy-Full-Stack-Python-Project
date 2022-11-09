@@ -12,6 +12,9 @@
     </div>
     {% if current_user.is_authenticated %}
     <div class="navbar-nav ms-auto">
+        {{ render_nav_item('notes', 'Notes') }}
+        {{ render_nav_item('categories', 'Categories') }}
+        {{ render_nav_item('search', 'Search') }}
         {{ render_nav_item('logout', 'Log out') }}
     </div>
     {% else %}

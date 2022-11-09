@@ -85,3 +85,18 @@ def register():
 @app.route("/homepage/", methods=["GET", "POST"])
 def homepage():
     return render_template("homepage.html")
+
+@app.route("/notes")
+@login_required
+def notes():
+    return render_template('notes.html', title='Notes')
+
+@app.route("/categories")
+@login_required
+def categories():
+    return render_template('categories.html', title='Categories')
+
+@app.route("/search")
+@login_required
+def search():
+    return render_template('search.html', title='Search')
