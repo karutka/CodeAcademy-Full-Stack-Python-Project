@@ -3,5 +3,14 @@
 {% block content %}
 {{ super() }}
 <h2>Here you can create new category</h2>
+<form method="post" action="#">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.category.label(class="form-control-label") }}
+        {{ form.category(class="form-control") }}
+    </div>
+    <br>
+    {{ form.submit }}
+</form>
 
 {% endblock %}

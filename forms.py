@@ -21,6 +21,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Log In')
     
-class CatogeryForm(FlaskForm):
+class CategoryForm(FlaskForm):
     category = StringField('Category', [DataRequired()])
     submit = SubmitField('Add')

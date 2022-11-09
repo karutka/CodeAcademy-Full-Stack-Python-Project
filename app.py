@@ -112,10 +112,18 @@ def get_categories():
         all_categories = []
     return all_categories
 
-@app.route("/create_category")
+@app.route("/create_category", methods=["GET", "POST"])
 @login_required
 def create_category():
-    return render_template('create_category.html', title='New category')
+    db.create_all()
+    form = forms.CategoryForm()
+    if form.validate_on_submit():
+        create_category = Category(category=form.category.data, user_id=current_user.id)
+        db.session.add(create_category)
+        db.session.commit()
+        flash(f"New category was added", 'success')
+        return redirect(url_for('categories'))
+    return render_template('create_category.html', title='New category', form=form)
 
 @app.route("/search")
 @login_required
