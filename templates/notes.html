@@ -3,5 +3,19 @@
 {% block content %}
 {{ super() }}
 <h2>Notes</h2>
+{% if all_notes %}
+{% for note in all_notes %}
+<hr>
+<h3>{{note.title}}</h3>
+<p>
+    {{note.text}}
+    <br>Category: {{note.category}}
+    <br>
+</p>
+{% endfor %}
+<hr>
+{% endif %}
+
+<p><a href="{{ url_for('create_note')}}">New note</a></p>
 
 {% endblock %}

@@ -118,6 +118,24 @@ def notes():
         all_notes = []
     return render_template("notes.html", all_notes=all_notes)
 
+@app.route("/create_note", methods=["GET", "POST"])
+@login_required
+def create_note():
+    db.create_all()
+    form = forms.NoteForm()
+
+    categories = get_categories()
+    form.category.choices = [(category.id, category.category) for category in categories]
+    if form.validate_on_submit():
+        create_note = Note(title=form.title.data, text=form.text.data,
+                                 category_id=form.category.data, user_id=current_user.id)
+        db.session.add(create_note)
+        db.session.commit()
+        flash(f"Note created", 'success')
+        return redirect(url_for('notes'))
+
+    return render_template("create_note.html", form=form, categories=categories)
+
 def get_category_name(id):
     category_text = Category.query.filter_by(user_id=current_user.id, id=id).all()
 
