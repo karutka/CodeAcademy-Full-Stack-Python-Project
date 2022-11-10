@@ -136,6 +136,20 @@ def create_note():
 
     return render_template("create_note.html", form=form, categories=categories)
 
+@app.route("/update_note/<int:id>", methods=['GET', 'POST'])
+@login_required
+def update_note(id):
+    form = forms.NoteForm()
+    note = Note.query.get(id)
+    form.category.choices = [(str(category.id), category.category) for category in get_categories()]
+    if form.validate_on_submit():
+        note.title = form.title.data
+        note.text = form.text.data
+        note.category_id = form.category.data
+        db.session.commit()
+        return redirect(url_for('notes'))
+    return render_template("modify_note.html", form=form, note=note)
+
 @app.route("/delete_note/<int:id>")
 @login_required
 def delete_note(id):
