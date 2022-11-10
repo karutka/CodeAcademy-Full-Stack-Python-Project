@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, BooleanField, StringField, PasswordField
+from wtforms import SubmitField, BooleanField, StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 import app
 
@@ -24,3 +24,9 @@ class LoginForm(FlaskForm):
 class CategoryForm(FlaskForm):
     category = StringField('Category', [DataRequired()])
     submit = SubmitField('Add')
+    
+class NoteForm(FlaskForm):
+    title = StringField('Note title', [DataRequired()])
+    text = StringField('Note text', [DataRequired()])
+    category = SelectField('Categories', choices=[])
+    submit = SubmitField('Submit')
