@@ -45,6 +45,15 @@ class Category(db.Model):
     category = db.Column("Category", db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", lazy=True)
+    
+class Note(db.Model):
+    __tablename__ = "note"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column("Title", db.String)
+    text = db.Column("Text", db.String)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", lazy=True)
 
 @app.route("/")
 def index():
@@ -96,7 +105,26 @@ def homepage():
 @app.route("/notes")
 @login_required
 def notes():
-    return render_template('notes.html', title='Notes')
+    db.create_all()
+    try:
+        all_notes = Note.query.filter_by(user_id=current_user.id).all()
+        for note in all_notes:
+            category_text = get_category_name(note.category_id)
+
+            if category_text:
+                note.category = category_text
+
+    except:
+        all_notes = []
+    return render_template("notes.html", all_notes=all_notes)
+
+def get_category_name(id):
+    category_text = Category.query.filter_by(user_id=current_user.id, id=id).all()
+
+    if len(category_text) == 1:
+        return category_text[0].category
+    else:
+        return None
 
 @app.route("/categories")
 @login_required
