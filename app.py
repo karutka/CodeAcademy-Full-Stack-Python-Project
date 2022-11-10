@@ -125,6 +125,14 @@ def create_category():
         return redirect(url_for('categories'))
     return render_template('create_category.html', title='New category', form=form)
 
+@app.route("/delete_category/<int:id>")
+@login_required
+def delete_category(id):
+    note = Category.query.get(id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect(url_for('categories'))
+
 @app.route("/search")
 @login_required
 def search():
