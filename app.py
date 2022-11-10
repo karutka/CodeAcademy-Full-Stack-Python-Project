@@ -39,19 +39,19 @@ class User(db.Model, UserMixin):
     username = db.Column('Username', db.String(64), unique=True, index=True, nullable=False)
     password = db.Column('Password', db.String(64), unique=True, index=True, nullable=False)
 
-class Category(db.Model):
-    __tablename__ = "category"
-    id = db.Column(db.Integer, primary_key=True)
-    category = db.Column("Category", db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    user = db.relationship("User", lazy=True)
-    
 class Note(db.Model):
     __tablename__ = "note"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column("Title", db.String)
     text = db.Column("Text", db.String)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", lazy=True)
+    
+class Category(db.Model):
+    __tablename__ = "category"
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column("Category", db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", lazy=True)
 
@@ -136,6 +136,15 @@ def create_note():
 
     return render_template("create_note.html", form=form, categories=categories)
 
+@app.route("/delete_note/<int:id>")
+@login_required
+def delete_note(id):
+    note = Note.query.get(id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect(url_for('notes'))
+
+@login_required
 def get_category_name(id):
     category_text = Category.query.filter_by(user_id=current_user.id, id=id).all()
 
