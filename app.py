@@ -133,6 +133,17 @@ def delete_category(id):
     db.session.commit()
     return redirect(url_for('categories'))
 
+@app.route("/modify_category/<int:id>", methods=['GET', 'POST'])
+@login_required
+def modify_category(id):
+    form = forms.CategoryForm()
+    category = Category.query.get(id)
+    if form.validate_on_submit():
+        category.category = form.category.data
+        db.session.commit()
+        return redirect(url_for('categories'))
+    return render_template("modify_category.html", form=form, category=category)
+
 @app.route("/search")
 @login_required
 def search():

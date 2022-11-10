@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{{ super() }}
+<form method="post" action="#">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.category.label(class="form-control-label") }}
+        {{ form.category(class="form-control", value=category.category) }}
+    </div>
+    <br>
+    {{ form.submit }}
+</form>
+{% endblock %}
