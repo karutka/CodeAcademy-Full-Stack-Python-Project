@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, BooleanField, StringField, PasswordField, SelectField
+from wtforms import SubmitField, BooleanField, StringField, PasswordField, FloatField, SelectField, SelectMultipleField, \
+    widgets
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 import app
 
@@ -30,3 +31,14 @@ class NoteForm(FlaskForm):
     text = StringField('Note text', [DataRequired()])
     category = SelectField('Categories', choices=[])
     submit = SubmitField('Submit')
+    
+class MultiForm(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class SearchForm(FlaskForm):
+    title = StringField("Title")
+    category = StringField("Category")
+    categories = MultiForm("Categories")
+    submit = SubmitField("Submit")
