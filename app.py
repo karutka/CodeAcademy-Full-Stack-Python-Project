@@ -29,7 +29,7 @@ fa = FontAwesome(app)
 
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'register'
+login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 
@@ -58,6 +58,10 @@ class Category(db.Model):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/homepage/", methods=["GET", "POST"])
+def homepage():
+    return render_template("homepage.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -98,11 +102,7 @@ def register():
         return redirect(url_for('index'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route("/homepage/", methods=["GET", "POST"])
-def homepage():
-    return render_template("homepage.html")
-
-@app.route("/notes")
+@app.route("/notes",  methods=['GET', 'POST'])
 @login_required
 def notes():
     db.create_all()
@@ -118,14 +118,14 @@ def notes():
         all_notes = []
     return render_template("notes.html", all_notes=all_notes)
 
-@app.route("/create_note", methods=["GET", "POST"])
+@app.route("/create_note/<int:category_id>", methods=["GET", "POST"])
 @login_required
-def create_note():
+def create_note(category_id):
     db.create_all()
     form = forms.NoteForm()
-
     categories = get_categories()
-    form.category.choices = [(category.id, category.category) for category in categories]
+    form.category.choices = [(str(category.id), category.category) for category in get_categories()]
+
     if form.validate_on_submit():
         create_note = Note(title=form.title.data, text=form.text.data,
                                  category_id=form.category.data, user_id=current_user.id)
@@ -133,8 +133,12 @@ def create_note():
         db.session.commit()
         flash(f"Note created", 'success')
         return redirect(url_for('notes'))
-
-    return render_template("create_note.html", form=form, categories=categories)
+    else:
+        selected_category = [category.id for category in categories if category_id == category.id]
+        if selected_category:
+            form.category.default = str(selected_category[0])
+            form.process()
+        return render_template("create_note.html", form=form, categories=categories)
 
 @app.route("/update_note/<int:id>", methods=['GET', 'POST'])
 @login_required
@@ -172,7 +176,8 @@ def get_category_name(id):
 def categories():
     db.create_all()
     all_categories = get_categories()
-    return render_template('categories.html', title='Categories', all_categories=all_categories)
+    all_notes = get_notes()
+    return render_template('categories.html', title='Categories', all_categories=all_categories, all_notes=all_notes)
 
 def get_categories():
     try:
@@ -180,6 +185,14 @@ def get_categories():
     except:
         all_categories = []
     return all_categories
+
+@login_required
+def get_notes():
+    try:
+        all_notes = Note.query.filter_by(user_id=current_user.id).all()
+    except:
+        all_notes = []
+    return all_notes
 
 @app.route("/create_category", methods=["GET", "POST"])
 @login_required
@@ -200,6 +213,14 @@ def delete_category(id):
     note = Category.query.get(id)
     db.session.delete(note)
     db.session.commit()
+    
+    notes = get_notes()
+    combined_notes = [note.id for note in notes if id == note.category_id]
+
+    if combined_notes:
+        for combined_note in combined_notes:
+            delete_note(combined_note)
+    
     return redirect(url_for('categories'))
 
 @app.route("/modify_category/<int:id>", methods=['GET', 'POST'])
@@ -213,7 +234,33 @@ def modify_category(id):
         return redirect(url_for('categories'))
     return render_template("modify_category.html", form=form, category=category)
 
-@app.route("/search")
+@app.route("/search", methods=['GET', 'POST'])
 @login_required
 def search():
-    return render_template('search.html', title='Search')
+    db.create_all()
+    wanted_title = None
+    wanted_category = []
+    search_form = forms.SearchForm()
+    search_form.categories.choices = [(str(category.id), category.category) for category in get_categories()]
+    if search_form.validate_on_submit():
+        wanted_title = search_form.title.data
+        wanted_category = search_form.categories.data
+    try:
+        all_notes = Note.query.filter_by(user_id=current_user.id).all()
+        for note in list(all_notes):
+            if wanted_title and wanted_title.lower() not in note.title.lower():
+                all_notes.remove(note)
+                continue
+
+            if wanted_category and str(note.category_id) not in wanted_category:
+                all_notes.remove(note)
+                continue
+
+            category_text = get_category_name(note.category_id)
+
+            if category_text:
+                note.category = category_text
+
+    except:
+        all_notes = []
+    return render_template('search.html', title='Search', all_notes=all_notes, search_form=search_form)
