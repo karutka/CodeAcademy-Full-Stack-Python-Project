@@ -78,4 +78,4 @@ For the full list of software dependencies see [requirements.txt](requirements.t
 
 None
 
-Copyright (c) 2022 Kastė Rutkaauskaitė
+Copyright (c) 2022 Kastė Rutkauskaitė
