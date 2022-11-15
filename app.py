@@ -1,10 +1,7 @@
 import os
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
-from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap5
 from flask_moment import Moment
 from flask_fontawesome import FontAwesome
@@ -221,7 +218,7 @@ def categories():
         all_notes=all_notes,
     )
 
-
+@login_required
 def get_categories():
     try:
         all_categories = Category.query.filter_by(user_id=current_user.id).all()
