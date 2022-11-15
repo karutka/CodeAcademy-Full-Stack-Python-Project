@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block pagetitle %}Log in{% endblock %}
+{% block pagetitle %}Log in | {% endblock %}
 
 {% block content %}
     {{ super() }}
@@ -8,7 +8,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Login</legend>
+                <legend class="border-bottom mb-4">Log in</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
@@ -44,11 +44,7 @@
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
+            <br>
         </form>
-    </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-<!--            Already Have An Account? <a class="ml-2" href="{{ url_for('index') }}">Sign In</a>-->
-        </small>
     </div>
 {% endblock content %}

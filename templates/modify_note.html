@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
+{% block pagetitle %}Notes | {% endblock %}
+
 {% block content %}
 {{ super() }}
+<div style="margin: 50px;">
+<h2 class="header">Here you can edit your note</h2>
 <form method="post" action="#">
     {{ form.hidden_tag() }}
     <div class="form-group">
@@ -19,4 +23,5 @@
     <br>
     {{ form.submit }}
 </form>
+</div>
 {% endblock %}

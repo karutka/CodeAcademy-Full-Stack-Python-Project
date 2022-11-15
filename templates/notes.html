@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
 
+{% block pagetitle %}Notes | {% endblock %}
+
 {% block content %}
 {{ super() }}
-<h2>Notes</h2>
+<div style="margin: 50px;">
+<div class="header">
+    <h2>Notes</h2>
+    <br>
+    <a class="ref" href="{{ url_for('create_note', category_id=0)}}">New note</a>
+</div>
+
 {% if all_notes %}
 {% for note in all_notes %}
 <hr>
@@ -10,14 +18,13 @@
 <p>
     {{note.text}}
     <br>Category: {{note.category}}
-    <a href="{{ url_for('update_note', id=note['id']) }}">Modify</a>
-    <a href="{{ url_for('delete_note', id=note['id']) }}">Delete</a>
+    <br>
+    <a class="ref" href="{{ url_for('update_note', id=note['id']) }}">Edit</a>
+    <a class="ref" href="{{ url_for('delete_note', id=note['id']) }}">Delete</a>
     <br>
 </p>
 {% endfor %}
 <hr>
 {% endif %}
-
-<p><a href="{{ url_for('create_note')}}">New note</a></p>
-
+</div>
 {% endblock %}

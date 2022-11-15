@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block pagetitle %}Register{% endblock %}
+{% block pagetitle %}Sign up | {% endblock %}
 
 {% block content %}
 {{ super() }}
@@ -54,11 +54,12 @@
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
+            <br>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                     Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Log in</a>
+                </small>
+            </div>
         </form>
-    </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-<!--            Already Have An Account? <a class="ml-2" href="{{ url_for('index') }}">Sign In</a>-->
-        </small>
     </div>
 {% endblock content %}
