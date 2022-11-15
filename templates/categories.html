@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block pagetitle %}Categories | {% endblock %}
+
+{% block content %}
+{{ super() }}
+<div style="margin: 50px;">
+    <div class="header">
+        <h2>Categories</h2>
+        <br>
+        <a class="ref" href="{{ url_for('create_category')}}">New category</a>
+    </div>
+
+    {% if all_categories %}
+    {% for category in all_categories %}
+    <hr>
+    <p>
+        <h3>{{category.category}}</h3>
+        <br>
+        <a class="ref" href="{{ url_for('create_note', category_id=category['id']) }}">Add note</a>&nbsp;
+        <a class="ref" href="{{ url_for('search') }}">See existing notes</a>&nbsp;
+        <a class="ref" href="{{ url_for('modify_category', id=category['id']) }}">Modify category</a>&nbsp;
+        <a class="ref" href="{{ url_for('delete_category', id=category['id']) }}">Delete category</a>&nbsp;
+    </p>
+    {% endfor %}
+    <hr>
+    {% endif %}
+</div>
+{% endblock %}

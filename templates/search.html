@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block pagetitle %}Search | {% endblock %}
+
+{% block content %}
+{{ super() }}
+<div style="margin: 50px;">
+    <h2 class="header">Search</h2>
+    {% if search_form %}
+    <form method="post" action="/search">
+        {{ search_form.hidden_tag() }}
+        <div class="form-group">
+            {{ search_form.title.label(class="form-control-label") }}
+            {{ search_form.title(class="form-control") }}
+            <br>
+            {{ search_form.categories.label(class="form-control-label") }}
+            {{ search_form.categories }}
+        </div>
+        <br>
+        {{ search_form.submit }}
+    </form>
+    {% endif %}
+
+    {% if all_notes %}
+    {% for note in all_notes %}
+    <hr>
+    <h3>{{note.title}}</h3>
+    <p>
+        {{note.text}}
+        <br>Category: {{note.category}}
+        <a class="ref" href="{{ url_for('update_note', id=note['id']) }}">Modify</a>
+        <a class="ref" href="{{ url_for('delete_note', id=note['id']) }}">Delete</a>
+        <br>
+    </p>
+    {% endfor %}
+    <hr>
+    {% endif %}
+</div>
+{% endblock %}

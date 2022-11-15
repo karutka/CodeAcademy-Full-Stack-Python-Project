@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block pagetitle %}Categories | {% endblock %}
+
+{% block content %}
+{{ super() }}
+<div style="margin: 50px;">
+    <h2 class="header">Here you can edit category's title</h2>
+    <form method="post" action="#">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.category.label(class="form-control-label") }}
+            {{ form.category(class="form-control", value=category.category) }}
+        </div>
+        <br>
+        {{ form.submit }}
+    </form>
+</div>
+{% endblock %}
