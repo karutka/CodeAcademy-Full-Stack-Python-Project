@@ -148,6 +148,10 @@ def create_note(category_id):
         (str(category.id), category.category) for category in get_categories()
     ]
 
+    if len(form.category.choices) == 0:
+        flash("No categories found, you must create one first!", "error")
+        return create_category()
+
     if form.validate_on_submit():
         create_note = Note(
             title=form.title.data,
