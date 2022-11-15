@@ -5,23 +5,23 @@
 {% block content %}
 {{ super() }}
 <div style="margin: 50px;">
-<div class="header">
-    <h2>Categories</h2>
-    <br>
-    <a class="ref" href="{{ url_for('create_category')}}">New category</a>
-</div>
+    <div class="header">
+        <h2>Categories</h2>
+        <br>
+        <a class="ref" href="{{ url_for('create_category')}}">New category</a>
+    </div>
 
-{% if all_categories %}
-{% for category in all_categories %}
-<hr>
-<p>
-    {{category.category}}
-    <br>
-    <a class="ref" href="{{ url_for('modify_category', id=category['id']) }}">Edit</a>
-    <a class="ref" href="{{ url_for('delete_category', id=category['id']) }}">Delete</a>
-</p>
-{% endfor %}
-<hr>
-{% endif %}
+    {% if all_categories %}
+    {% for category in all_categories %}
+    <hr>
+    <p>
+        {{category.category}}
+        <br>
+        <a class="ref" href="{{ url_for('modify_category', id=category['id']) }}">Edit</a>
+        <a class="ref" href="{{ url_for('delete_category', id=category['id']) }}">Delete</a>
+    </p>
+    {% endfor %}
+    <hr>
+    {% endif %}
 </div>
 {% endblock %}

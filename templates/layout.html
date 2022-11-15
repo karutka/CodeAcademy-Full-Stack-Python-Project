@@ -5,7 +5,8 @@
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="navbar-nav me-auto">
 
-        <a class="nav-item nav-link{% if request.endpoint and request.endpoint == 'index' %} active" aria-current="page{% endif %}"
+        <a class="nav-item nav-link{% if request.endpoint and request.endpoint == 'index' %} active" 
+           aria-current="page{% endif %}"
            href="{{ url_for('index') }}"><i class="fa fa-home"></i>
         </a>
         {{ render_nav_item('homepage', 'Homepage') }}
