@@ -245,23 +245,29 @@ def search():
     if search_form.validate_on_submit():
         wanted_title = search_form.title.data
         wanted_category = search_form.categories.data
-    try:
-        all_notes = Note.query.filter_by(user_id=current_user.id).all()
-        for note in list(all_notes):
-            if wanted_title and wanted_title.lower() not in note.title.lower():
-                all_notes.remove(note)
-                continue
+        
+    is_search = wanted_title or wanted_category
+    
+    if is_search:
+        try:
+            all_notes = Note.query.filter_by(user_id=current_user.id).all()
+            for note in list(all_notes):
+                if wanted_title and wanted_title.lower() not in note.title.lower():
+                    all_notes.remove(note)
+                    continue
 
-            if wanted_category and str(note.category_id) not in wanted_category:
-                all_notes.remove(note)
-                continue
+                if wanted_category and str(note.category_id) not in wanted_category:
+                    all_notes.remove(note)
+                    continue
 
-            category_text = get_category_name(note.category_id)
+                category_text = get_category_name(note.category_id)
 
-            if category_text:
-                note.category = category_text
+                if category_text:
+                    note.category = category_text
 
-    except:
+        except:
+            all_notes = []
+    else:
         all_notes = []
     return render_template('search.html', title='Search', all_notes=all_notes, search_form=search_form)
 
