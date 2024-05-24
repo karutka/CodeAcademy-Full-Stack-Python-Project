@@ -1,3 +1,3 @@
 # Final-Full-Stack-Python-Project
-Bigiamasis projektas
+Bigiamasis projektas/n
 Projekto failai yra 'dev' branch'e
