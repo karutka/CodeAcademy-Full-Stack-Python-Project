@@ -1,4 +1,4 @@
-Final Full Stack Python Project
+# Final Full Stack Python Project
 
 This is a program for taking notes. To do so user on the webpage has to sign up and sign in.
 The user can create categories, add notes, search through, and edit or delete them.
